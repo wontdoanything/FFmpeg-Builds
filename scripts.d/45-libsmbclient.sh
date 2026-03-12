@@ -23,3 +23,6 @@ ffbuild_clone() {
 ffbuild_build() {
     return 0
 }
+
+# 告诉框架这是系统库，不需要clone/build
+SCRIPT_SKIP="1"
