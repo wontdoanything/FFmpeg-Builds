@@ -1,28 +1,35 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
+
+SCRIPT_REPO="https://github.com/samba-team/samba.git"
+SCRIPT_COMMIT="samba-4.19.4"
 
 ffbuild_enabled() {
     [[ $TARGET == linux* ]] || return 1
-    return 0
 }
 
 ffbuild_dockerbuild() {
     apt-get update
-    apt-get install -y libsmbclient-dev
+    apt-get install -y \
+      python3 \
+      python3-dev \
+      pkg-config \
+      libgnutls28-dev \
+      libacl1-dev \
+      libattr1-dev \
+      libpopt-dev
+
+    ./configure \
+      --prefix="$FFBUILD_PREFIX" \
+      --enable-fhs \
+      --disable-python \
+      --without-ad-dc
+
+    make -j$(nproc)
+
+    make install
 }
 
 ffbuild_configure() {
     echo "--enable-libsmbclient"
 }
-
-# 不需要下载源码
-ffbuild_clone() {
-    return 0
-}
-
-# 不需要编译
-ffbuild_build() {
-    return 0
-}
-
-# 告诉框架这是系统库，不需要clone/build
-SCRIPT_SKIP="1"
