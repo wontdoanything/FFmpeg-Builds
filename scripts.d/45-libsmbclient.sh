@@ -11,8 +11,8 @@ ffbuild_enabled() {
 ffbuild_dockerbuild() {
     ./configure \
       --prefix="$FFBUILD_PREFIX" \
-      --disable-shared \
-      --enable-static \
+      --enable-shared \
+      --disable-static \
       --enable-libsmbclient
     make -j$(nproc)
     make install DESTDIR="$FFBUILD_DESTDIR"
